@@ -1,5 +1,5 @@
 resource "aws_eks_cluster" "fargate" {
-  name     = var.cluster_name
+  name    = var.cluster_name
   role_arn = aws_iam_role.eks_cluster_role.arn
   vpc_config {
     subnet_ids = [
@@ -101,8 +101,8 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_cni_policy" {
 
 
 resource "aws_eks_fargate_profile" "default" {
-  cluster_name = aws_eks_cluster.fargate.name
-  name_prefix  = "fp"
+  cluster_name           = aws_eks_cluster.fargate.name
+  name_prefix            = "fp"
   pod_execution_role_arn = aws_iam_role.eks_fargate_pod_execution_role.arn
   subnet_ids = [
     var.private_subnet_1_id,
