@@ -67,7 +67,7 @@ module "eks_fargate" {
 }
 
 module "cloudwatch_eks_logging" {
-  source = "./modules/cloudwatch-eks"
+  source = "./modules/cloudwatch"
 
   cluster_name              = module.eks_fargate.cluster_name
   cluster_role_arn          = module.eks_fargate.cluster_role_arn
