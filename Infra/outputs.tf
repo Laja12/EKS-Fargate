@@ -15,5 +15,5 @@ output "cluster_certificate_authority_data" {
 }
 
 output "cloudwatch_log_group_name" {
-  value = module.cloudwatch_eks_logging.log_group_name
+  value = module.cloudwatch.log_group_name
 }
