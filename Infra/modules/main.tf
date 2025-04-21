@@ -1,3 +1,48 @@
+resource "aws_security_group" "eks_cluster" {
+  name_prefix = "eks-cluster-sg-"
+  vpc_id      = module.vpc.vpc_id
+
+  # Allow inbound from worker nodes (Fargate pods) to control plane
+  ingress {
+    from_port   = 1025
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = [module.vpc.private_subnet_1_cidr, module.vpc.private_subnet_2_cidr]
+    description = "Allow worker nodes inbound to control plane"
+  }
+
+  # Allow control plane outbound to worker nodes (Fargate pods)
+  egress {
+    from_port   = 1025
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = [module.vpc.private_subnet_1_cidr, module.vpc.private_subnet_2_cidr]
+    description = "Allow control plane outbound to worker nodes"
+  }
+
+  # Allow control plane to communicate with itself
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+    description = "Allow control plane self-communication"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow all outbound traffic"
+  }
+
+  tags = {
+    Name = "eks-fargate-cluster-sg"
+  }
+}
+
+
 module "vpc" {
   source               = "./modules/vpc"
   vpc_cidr             = var.vpc_cidr
@@ -18,5 +63,55 @@ module "eks_fargate" {
   vpc_id             = module.vpc.vpc_id
   private_subnet_1_id = module.vpc.private_subnet_1_id
   private_subnet_2_id = module.vpc.private_subnet_2_id
-  cluster_security_group_ids = [aws_security_group.eks_cluster.id] # Pass the SG ID
+  cluster_security_group_ids = [aws_security_group.eks_cluster.id] 
+}
+
+module "cloudwatch_eks_logging" {
+  source = "./modules/cloudwatch-eks"
+
+  cluster_name              = module.eks_fargate.cluster_name
+  cluster_role_arn          = module.eks_fargate.cluster_role_arn
+  private_subnet_ids        = [module.vpc.private_subnet_1_id, module.vpc.private_subnet_2_id]
+  cluster_security_group_id = module.eks_fargate.cluster_security_group_id # Use the output from eks_fargate
+  kubernetes_version        = module.eks_fargate.kubernetes_version
+  log_retention_days        = 14
+}
+
+resource "aws_security_group" "alb" {
+  name_prefix = "alb-sg-"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Adjust as needed
+    description = "Allow HTTP traffic"
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Adjust as needed
+    description = "Allow HTTPS traffic"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "application-load-balancer-sg"
+  }
+}
+
+
+module "ecr" {
+  source                       = "./modules/ecr"
+  patient_service_repo_name    = "patient-service"
+  appointment_service_repo_name = "appointment-service"
 }
