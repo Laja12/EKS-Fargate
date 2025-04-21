@@ -99,14 +99,6 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_cni_policy" {
   role_arn   = aws_iam_role.eks_cluster_role.arn
 }
 
-resource "aws_security_group" "eks_cluster_sg" {
-  name_prefix = "${var.cluster_name}-cluster-sg"
-  vpc_id      = var.vpc_id
-
-  tags = {
-    Name = "${var.cluster_name}-cluster-sg"
-  }
-}
 
 resource "aws_eks_fargate_profile" "default" {
   cluster_name = aws_eks_cluster.fargate.name
