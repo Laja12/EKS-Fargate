@@ -42,7 +42,6 @@ jobs:
         
       - name: Terraform plan
         run: terraform plan -var-file="../environments/dev/terraform.tfvars"
-        working-directory: ./Infra
 
       - name: Terraform Apply or Destroy
         run: |
