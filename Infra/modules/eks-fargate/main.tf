@@ -6,7 +6,7 @@ resource "aws_eks_cluster" "fargate" {
       var.private_subnet_1_id,
       var.private_subnet_2_id,
     ]
-    security_group_ids = [aws_security_group.eks_cluster_sg.id]
+    security_group_ids = [var.eks_cluster_sg_id]
   }
 
   version = var.kubernetes_version
