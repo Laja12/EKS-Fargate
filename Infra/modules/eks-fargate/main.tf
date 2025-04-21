@@ -20,14 +20,8 @@ resource "aws_eks_cluster" "fargate" {
   tags = {
     Name = var.cluster_name
   }
-}
 
-resource "aws_eks_cluster_log_config" "fargate_logging" {
-  cluster_name = aws_eks_cluster.fargate.name
-
-  enabled = true
-
-  types = [
+  enabled_cluster_log_types = [
     "api",
     "audit",
     "authenticator",
