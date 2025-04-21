@@ -67,16 +67,6 @@ module "eks_fargate" {
   eks_cluster_sg_id    = aws_security_group.eks_cluster_sg.id
 }
 
-module "cloudwatch" {
-  source = "./modules/cloudwatch"
-
-  cluster_name              = module.eks_fargate.cluster_name
-  cluster_role_arn          = module.eks_fargate.cluster_role_arn
-  private_subnet_ids        = [module.vpc.private_subnet_1_id, module.vpc.private_subnet_2_id]
-  cluster_security_group_id = aws_security_group.eks_cluster_sg.id
-  kubernetes_version        = module.eks_fargate.kubernetes_version
-  log_retention_days        = 14
-}
 
 module "ecr" {
   source                       = "./modules/ecr"
