@@ -49,17 +49,12 @@ variable "eks_cluster_name" {
 
 variable "patient_service_image" {
   description = "Docker image URL for the patient service"
-  default     = "741448937052.dkr.ecr.ap-south-1.amazonaws.com/patient-service:latest"
+  default     = "877786395093.dkr.ecr.ap-south-1.amazonaws.com/patient-service:latest"
 }
 
 variable "appointment_service_image" {
   description = "Docker image URL for the appointment service"
-  default     = "741448937052.dkr.ecr.ap-south-1.amazonaws.com/appointment-service:latest"
-}
-
-variable "alb_name" {
-  description = "The name of the Application Load Balancer"
-  default     = "usecase3-alb"
+  default     = "877786395093.dkr.ecr.ap-south-1.amazonaws.com/appointment-service:latest"
 }
 
 variable "log_group_name" {
