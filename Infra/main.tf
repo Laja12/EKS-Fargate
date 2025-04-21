@@ -7,6 +7,7 @@ resource "aws_security_group" "eks_cluster_sg" {
     from_port   = 1025
     to_port     = 65535
     protocol    = "tcp"
+    cidr_blocks = [module.vpc.private_subnet_1_cidr, module.vpc.private_subnet_2_cidr]
     description = "Allow worker nodes inbound to control plane"
   }
 
@@ -15,6 +16,7 @@ resource "aws_security_group" "eks_cluster_sg" {
     from_port   = 1025
     to_port     = 65535
     protocol    = "tcp"
+    cidr_blocks = [module.vpc.private_subnet_1_cidr, module.vpc.private_subnet_2_cidr]
     description = "Allow control plane outbound to worker nodes"
   }
 
@@ -39,6 +41,7 @@ resource "aws_security_group" "eks_cluster_sg" {
     Name = "eks-fargate-cluster-sg"
   }
 }
+
 
 
 module "vpc" {
