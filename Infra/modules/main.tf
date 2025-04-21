@@ -1,4 +1,4 @@
-resource "aws_security_group" "eks_cluster" {
+resource "aws_security_group" "eks_cluster_sg" {
   name_prefix = "eks-cluster-sg-"
   vpc_id      = module.vpc.vpc_id
 
@@ -63,7 +63,7 @@ module "eks_fargate" {
   vpc_id             = module.vpc.vpc_id
   private_subnet_1_id = module.vpc.private_subnet_1_id
   private_subnet_2_id = module.vpc.private_subnet_2_id
-  cluster_security_group_ids = [aws_security_group.eks_cluster.id] 
+  cluster_security_group_ids = [aws_security_group.eks_cluster_sg.id] 
 }
 
 module "cloudwatch_eks_logging" {
