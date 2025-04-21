@@ -1,6 +1,7 @@
 resource "aws_eks_cluster" "fargate" {
-  name    = var.cluster_name
+  name     = var.cluster_name
   role_arn = aws_iam_role.eks_cluster_role.arn
+
   vpc_config {
     subnet_ids = [
       var.private_subnet_1_id,
@@ -19,25 +20,25 @@ resource "aws_eks_cluster" "fargate" {
   tags = {
     Name = var.cluster_name
   }
+}
 
-  # Enable EKS logging here
-  logging {
-    cluster_logging {
-      enabled = true
-      types = [
-        "api",
-        "audit",
-        "authenticator",
-        "controllerManager",
-        "scheduler"
-      ]
-    }
-  }
+resource "aws_eks_cluster_logging" "fargate_logging" {
+  cluster_name = aws_eks_cluster.fargate.name
+
+  enabled = true
+
+  types = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
 }
 
 resource "aws_cloudwatch_log_group" "eks_cluster_log_group" {
-  name_prefix = "/aws/eks/${var.cluster_name}"
-  retention_in_days = var.log_retention_days
+  name_prefix       = "/aws/eks/${var.cluster_name}"
+  retention_in_days = 30
 
   tags = {
     Name = "${var.cluster_name}-logs"
@@ -114,12 +115,12 @@ resource "aws_iam_policy" "eks_cluster_policy" {
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   policy_arn = aws_iam_policy.eks_cluster_policy.arn
-  role = aws_iam_role.eks_cluster_role.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks_vpc_cni_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role = aws_iam_role.eks_cluster_role.name
+  role       = aws_iam_role.eks_cluster_role.name
 }
 
 resource "aws_eks_fargate_profile" "default" {
@@ -176,5 +177,6 @@ resource "aws_iam_policy" "eks_fargate_pod_execution_policy" {
 
 resource "aws_iam_role_policy_attachment" "eks_fargate_pod_execution_policy" {
   policy_arn = aws_iam_policy.eks_fargate_pod_execution_policy.arn
-  role = aws_iam_role.eks_fargate_pod_execution_role.name
+  role       = aws_iam_role.eks_fargate_pod_execution_role.name
 }
+
