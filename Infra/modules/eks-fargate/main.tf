@@ -136,7 +136,7 @@ resource "aws_eks_fargate_profile" "default" {
 }
 
 resource "aws_iam_role" "eks_fargate_pod_execution_role" {
-  name_prefix = "${var.cluster_name}-fargate-pod-execution-role"
+  name_prefix = "${var.cluster_name}-fargate-pod-exec-role"
   assume_role_policy = jsonencode({
     Statement = [{
       Action = "sts:AssumeRole"
