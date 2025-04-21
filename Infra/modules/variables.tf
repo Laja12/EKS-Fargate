@@ -1,6 +1,6 @@
 variable "aws_region" {
   description = "AWS region to deploy resources"
-  default     = "ap-south-1"
+  default     = "us-east-1"
 }
 
 
@@ -32,12 +32,12 @@ variable "private_subnet_2_cidr" {
 
 variable "az_1" {
   description = "Availability Zone 1"
-  default     = "ap-south-1a"
+  default     = "us-east-1a"
 }
 
 variable "az_2" {
   description = "Availability Zone 2"
-  default     = "ap-south-1b"
+  default     = "us-east-1b"
 }
 
 
