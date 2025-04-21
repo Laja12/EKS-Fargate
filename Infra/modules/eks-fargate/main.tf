@@ -16,21 +16,22 @@ resource "aws_eks_cluster" "fargate" {
     aws_iam_role_policy_attachment.eks_vpc_cni_policy,
   ]
 
-  logging {
-    cluster_logging {
-      enabled = true
-      types = [
-        "api",
-        "audit",
-        "authenticator",
-        "controllerManager",
-        "scheduler"
-      ]
-    }
-  }
-
   tags = {
     Name = var.cluster_name
+  }
+}
+
+resource "aws_eks_cluster_logging" "fargate_logging" {
+  cluster_name = aws_eks_cluster.fargate.name
+
+  enabled {
+    types = [
+      "api",
+      "audit",
+      "authenticator",
+      "controllerManager",
+      "scheduler"
+    ]
   }
 }
 
