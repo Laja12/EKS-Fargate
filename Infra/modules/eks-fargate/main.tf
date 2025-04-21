@@ -91,12 +91,12 @@ resource "aws_iam_policy" "eks_cluster_policy" {
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   policy_arn = aws_iam_policy.eks_cluster_policy.arn
-  role_arn   = aws_iam_role.eks_cluster_role.arn
+  role = aws_iam_role.eks_cluster_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "eks_vpc_cni_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
-  role_arn   = aws_iam_role.eks_cluster_role.arn
+  role = aws_iam_role.eks_cluster_role.name
 }
 
 
@@ -154,5 +154,5 @@ resource "aws_iam_policy" "eks_fargate_pod_execution_policy" {
 
 resource "aws_iam_role_policy_attachment" "eks_fargate_pod_execution_policy" {
   policy_arn = aws_iam_policy.eks_fargate_pod_execution_policy.arn
-  role_arn   = aws_iam_role.eks_fargate_pod_execution_role.arn
+  role = aws_iam_role.eks_fargate_pod_execution_role.name
 }
