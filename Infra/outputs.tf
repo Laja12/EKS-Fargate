@@ -17,7 +17,3 @@ output "cluster_certificate_authority_data" {
 output "cloudwatch_log_group_name" {
   value = module.cloudwatch_eks_logging.log_group_name
 }
-
-output "eks_cluster_security_group_id" {
-  value = aws_security_group.eks_cluster.id
-}
