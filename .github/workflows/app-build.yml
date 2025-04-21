@@ -3,6 +3,10 @@ name: Image build
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   # Job : Deploy the application (Depends on 'create-infra' job)
   deploy-app:
