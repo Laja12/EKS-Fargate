@@ -57,7 +57,3 @@ variable "appointment_service_image" {
   default     = "877786395093.dkr.ecr.ap-south-1.amazonaws.com/appointment-service:latest"
 }
 
-variable "log_group_name" {
-  description = "Name of the CloudWatch log group"
-  type        = string
-}
