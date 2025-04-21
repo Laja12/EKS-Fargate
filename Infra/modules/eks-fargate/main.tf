@@ -21,18 +21,17 @@ resource "aws_eks_cluster" "fargate" {
   }
 }
 
-resource "aws_eks_cluster_logging" "fargate_logging" {
+resource "aws_eks_cluster_log_config" "fargate_logging" {
   cluster_name = aws_eks_cluster.fargate.name
 
-  enabled {
-    types = [
-      "api",
-      "audit",
-      "authenticator",
-      "controllerManager",
-      "scheduler"
-    ]
-  }
+  enable_cluster_logging = true
+  types = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
 }
 
 resource "aws_iam_role" "eks_cluster_role" {
