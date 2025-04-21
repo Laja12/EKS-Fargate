@@ -23,3 +23,8 @@ variable "private_subnet_2_id" {
   description = "ID of the second private subnet"
   type        = string
 }
+
+variable "eks_cluster_sg_id" {
+  description = "The ID of the EKS cluster security group"
+  type        = string
+}
