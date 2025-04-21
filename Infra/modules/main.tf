@@ -77,39 +77,6 @@ module "cloudwatch_eks_logging" {
   log_retention_days        = 14
 }
 
-resource "aws_security_group" "alb" {
-  name_prefix = "alb-sg-"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Adjust as needed
-    description = "Allow HTTP traffic"
-  }
-
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # Adjust as needed
-    description = "Allow HTTPS traffic"
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "application-load-balancer-sg"
-  }
-}
-
-
 module "ecr" {
   source                       = "./modules/ecr"
   patient_service_repo_name    = "patient-service"
