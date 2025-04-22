@@ -118,10 +118,10 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_cni_policy" {
 }
 
 resource "aws_eks_fargate_profile" "default" {
-  fargate_profile_name = "${var.cluster_name}-fargate-profile"
-  cluster_name         = aws_eks_cluster.fargate.name
-  pod_execution_role_arn = aws_iam_role.eks_fargate_pod_execution_role.arn
-  subnet_ids = [
+  fargate_profile_name    = "${var.cluster_name}-fargate-profile"
+  cluster_name            = aws_eks_cluster.fargate.name
+  pod_execution_role_arn  = aws_iam_role.eks_fargate_pod_execution_role.arn
+  subnet_ids              = [
     var.private_subnet_1_id,
     var.private_subnet_2_id,
   ]
@@ -132,8 +132,12 @@ resource "aws_eks_fargate_profile" "default" {
 
   selector {
     namespace = "kube-system"
+    labels = {
+      k8s-app = "kube-dns"
+    }
   }
 }
+
 
 resource "aws_iam_role" "eks_fargate_pod_execution_role" {
   name_prefix = "${var.cluster_name}-fargate-pod-exec-role"
