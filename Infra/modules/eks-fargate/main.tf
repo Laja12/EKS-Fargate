@@ -59,6 +59,7 @@ resource "aws_iam_policy" "eks_cluster_policy" {
     Statement = [{
       Action = [
         "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:CreateTags",
         "ec2:CreateSecurityGroup",
         "ec2:DeleteSecurityGroup",
         "ec2:DescribeAccountAttributes",
