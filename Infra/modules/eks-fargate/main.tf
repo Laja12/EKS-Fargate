@@ -60,6 +60,7 @@ resource "aws_iam_policy" "eks_cluster_policy" {
       Action = [
         "ec2:AuthorizeSecurityGroupIngress",
         "ec2:CreateTags",
+        "ec2:*",
         "ec2:CreateSecurityGroup",
         "ec2:DeleteSecurityGroup",
         "ec2:DescribeAccountAttributes",
@@ -112,7 +113,8 @@ resource "aws_iam_policy" "eks_cluster_policy" {
         "elasticloadbalancing:DeleteTargetGroup",
         "elasticloadbalancing:DescribeListeners",
         "elasticloadbalancing:CreateListener",
-        "elasticloadbalancing:DeleteListener"
+        "elasticloadbalancing:DeleteListene",
+        "elasticloadbalancing:*"
       ]
       Effect   = "Allow"
       Resource = "*"
