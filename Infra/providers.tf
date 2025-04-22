@@ -10,3 +10,33 @@ terraform {
 provider "aws" {
   region = var.region
 }
+
+
+data "aws_eks_cluster_auth" "eks" {
+  name = module.eks.cluster_name
+}
+resource "kubernetes_config_map" "aws_auth" {
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
+  }
+  data = {
+    mapRoles = jsonencode([
+      {
+        rolearn = module.iam.node_role_arn
+        username = "system:node:{{EC2PrivateDNSName}}"
+        groups = ["system:bootstrappers", "system:nodes"]
+      }
+    ])
+    mapUsers = jsonencode([
+  {
+    userarn = "arn:aws:iam::877786395093:user/vamsee.techops"
+    username = "vamsee.techops"
+    groups = [
+      "system:masters"
+    ]
+  }
+])
+}
+}
+ 
