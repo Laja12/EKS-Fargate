@@ -173,3 +173,36 @@ resource "aws_iam_role_policy_attachment" "eks_fargate_pod_execution_policy" {
   policy_arn = aws_iam_policy.eks_fargate_pod_execution_policy.arn
   role       = aws_iam_role.eks_fargate_pod_execution_role.name
 }
+
+resource "aws_iam_policy" "eks_k8s_access" {
+  name        = "eks-k8s_iam-policy"
+  description = "Policy to grant Kubernetes RBAC access to the EKS cluster"
+ 
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "eks:DescribeCluster",
+          "eks:ListClusters",
+          "eks:DescribeNodegroup",
+          "eks:ListNodegroups",
+          "eks:*"
+ 
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
+      {
+        Action   = "sts:AssumeRole"
+        Effect   = "Allow"
+        Resource = "*"
+      }
+    ]
+  })
+}
+ 
+resource "aws_iam_user_policy_attachment" "attach_k8s_access_policy" {
+  user       = "vamsee.techops"
+  policy_arn = aws_iam_policy.eks_k8s_access.arn
+}
