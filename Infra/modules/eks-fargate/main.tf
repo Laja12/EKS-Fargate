@@ -156,38 +156,53 @@ resource "aws_eks_fargate_profile" "default" {
   }
 }
 
-
 resource "aws_iam_role" "eks_fargate_pod_execution_role" {
   name_prefix = "${var.cluster_name}-fargate-pod-exec-role"
   assume_role_policy = jsonencode({
+    Version = "2012-10-17",
     Statement = [{
-      Action = "sts:AssumeRole"
-      Effect = "Allow"
+      Effect = "Allow",
       Principal = {
         Service = "eks-fargate-pods.amazonaws.com"
+      },
+      Action = "sts:AssumeRole",
+      Condition = {
+        ArnLike = {
+          "aws:SourceArn": "arn:aws:eks:<region-code>:<account-id>:fargateprofile/${var.cluster_name}/*"
+        }
       }
     }]
-    Version = "2012-10-17"
   })
 }
 
 resource "aws_iam_policy" "eks_fargate_pod_execution_policy" {
   name_prefix = "${var.cluster_name}-fargate-pod-execution-policy"
   policy = jsonencode({
-    Statement = [{
-      Action = [
-        "ec2:CreateNetworkInterface",
-        "ec2:DeleteNetworkInterface",
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:DetachNetworkInterface",
-        "ec2:ModifyNetworkInterfaceAttribute",
-        "ec2:AssignPrivateIpAddresses",
-        "ec2:UnassignPrivateIpAddresses"
-      ]
-      Effect   = "Allow"
-      Resource = "*"
-    }]
-    Version = "2012-10-17"
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ec2:CreateNetworkInterface",
+          "ec2:DeleteNetworkInterface",
+          "ec2:DescribeNetworkInterfaces",
+          "ec2:DetachNetworkInterface",
+          "ec2:ModifyNetworkInterfaceAttribute",
+          "ec2:AssignPrivateIpAddresses",
+          "ec2:UnassignPrivateIpAddresses"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchGetImage",
+          "ecr:BatchCheckLayerAvailability"
+        ],
+        Resource = "*"
+      }
+    ]
   })
 }
 
@@ -196,11 +211,11 @@ resource "aws_iam_role_policy_attachment" "ecr_read_only" {
   role       = aws_iam_role.eks_fargate_pod_execution_role.name
 }
 
-
 resource "aws_iam_role_policy_attachment" "eks_fargate_pod_execution_policy" {
   policy_arn = aws_iam_policy.eks_fargate_pod_execution_policy.arn
   role       = aws_iam_role.eks_fargate_pod_execution_role.name
 }
+
 
 resource "aws_iam_policy" "eks_k8s_access" {
   name        = "eks-k8s_iam-policy"
