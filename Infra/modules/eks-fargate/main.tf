@@ -168,7 +168,7 @@ resource "aws_iam_role" "eks_fargate_pod_execution_role" {
       Action = "sts:AssumeRole",
       Condition = {
         ArnLike = {
-          "aws:SourceArn": "arn:aws:eks:<region-code>:<account-id>:fargateprofile/${var.cluster_name}/*"
+          "aws:SourceArn": "arn:aws:eks:us-east-1:877786395093:fargateprofile/${var.cluster_name}/*"
         }
       }
     }]
