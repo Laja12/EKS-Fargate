@@ -98,7 +98,19 @@ resource "aws_iam_policy" "eks_cluster_policy" {
         "s3:ListBucket",
         "s3:PutBucketPolicy",
         "ssm:GetParameter",
-        "sts:AssumeRole"
+        "sts:AssumeRole",
+        "elasticloadbalancing:CreateLoadBalancer",
+        "elasticloadbalancing:DeleteLoadBalancer",
+        "elasticloadbalancing:DescribeLoadBalancers",
+        "elasticloadbalancing:ModifyLoadBalancerAttributes",
+        "elasticloadbalancing:RegisterTargets",
+        "elasticloadbalancing:DeregisterTargets",
+        "elasticloadbalancing:DescribeTargetGroups",
+        "elasticloadbalancing:CreateTargetGroup",
+        "elasticloadbalancing:DeleteTargetGroup",
+        "elasticloadbalancing:DescribeListeners",
+        "elasticloadbalancing:CreateListener",
+        "elasticloadbalancing:DeleteListener"
       ]
       Effect   = "Allow"
       Resource = "*"
@@ -106,6 +118,7 @@ resource "aws_iam_policy" "eks_cluster_policy" {
     Version = "2012-10-17"
   })
 }
+
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   policy_arn = aws_iam_policy.eks_cluster_policy.arn
