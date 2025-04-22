@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 
-/*data "aws_eks_cluster_auth" "eks" {
+data "aws_eks_cluster_auth" "eks" {
   name = module.eks_fargate.cluster_name
 }
 resource "kubernetes_config_map" "aws_auth" {
@@ -39,5 +39,5 @@ resource "kubernetes_config_map" "aws_auth" {
 ])
 }
 }
-*/
+
  
