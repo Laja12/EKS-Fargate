@@ -73,6 +73,7 @@ resource "aws_iam_policy" "eks_cluster_policy" {
         "ec2:DescribeVpcs",
         "ec2:ModifyNetworkInterfaceAttribute",
         "ec2:RevokeSecurityGroupIngress",
+        "ec2:DescribeInstances",  // Added permission
         "eks:CreateCluster",
         "eks:DeleteCluster",
         "eks:DescribeCluster",
@@ -118,6 +119,7 @@ resource "aws_iam_policy" "eks_cluster_policy" {
     Version = "2012-10-17"
   })
 }
+
 
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
