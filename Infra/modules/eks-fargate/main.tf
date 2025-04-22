@@ -173,6 +173,12 @@ resource "aws_iam_policy" "eks_fargate_pod_execution_policy" {
   })
 }
 
+resource "aws_iam_role_policy_attachment" "ecr_read_only" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+  role       = aws_iam_role.eks_fargate_pod_execution_role.name
+}
+
+
 resource "aws_iam_role_policy_attachment" "eks_fargate_pod_execution_policy" {
   policy_arn = aws_iam_policy.eks_fargate_pod_execution_policy.arn
   role       = aws_iam_role.eks_fargate_pod_execution_role.name
