@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.1.0"
+  required_version = ">= 1.0.0"
   backend "s3" {
-    bucket         = "techopsbucket123"
-    key            = "vpcec2/terraform.tfstateeks"
-    region         = "us-east-1"
-    encrypt        = true
-    dynamodb_table = "demo_table123"
+    bucket = "openproject-bucket1"  # Replace with your unique S3 bucket name
+    key    = "path/use-case-7/my-bucket2/statefile/terraform.tfstate"  # Path inside the bucket to store the state
+    region = "us-east-1"  # Replace with your desired AWS region
+    encrypt = true  # Enable encryption of the state file
+   
   }
 }
